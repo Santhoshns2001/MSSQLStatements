@@ -6,6 +6,8 @@ CustomerName varchar(50) not null,
 CustomerNumber bigint not null,
 CustomerAddress  varchar(50) not null
 )
+
+drop table customers
 select * from Customers;
 
 --alter table  Customers 
