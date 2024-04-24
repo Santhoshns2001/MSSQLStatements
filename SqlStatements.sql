@@ -3,9 +3,10 @@ use FirstDatabase
 create table Customers(
 CustomerId int primary key ,
 CustomerName varchar(50) not null, 
-CustomerNumber decimal not null,
+CustomerNumber bigint not null,
 CustomerAddress  varchar(50) not null
-);
+)
+select * from Customers;
 
 --alter table  Customers 
 --alter CustomerId int primary key indentity(1,1)
@@ -264,6 +265,40 @@ order by job,
 ename desc;
 
 
+-- seection 3
+			-- limiting rows
+
+			--The OFFSET and FETCH clauses are the options of the ORDER BY clause. 
+			--They allow you to limit the number of rows to be returned by a query.
+
+
+			-- offset fetch using
+
+			select * from Employees
+			order by sal,ename
+			offset 2 rows        -- in this initailly the sal column is sort in ascending  order and removing first two rows and printing remaining rows
+
+
+
+			select * from Employees
+			order by sal,ename
+			offset 2 rows
+			fetch next 1 rows only
+
+
+			-- SELECT TOP Using 
+
+			select top 2
+			ename ,job
+			from Employees
+			order by sal desc
+
+			select top 5 *
+			from Employees
+			order by sal desc
+				
+
+
 
 --Section 4   
       -- Filtering data
@@ -329,6 +364,112 @@ ename desc;
 
 
 			   --IN Operator 
+
+			   select * from Employees
+
+			   select eid,ename,job 
+			   from Employees
+			   where job in('manager','clerk','salesman')
+
+			   select * 
+			   from Employees
+			   where eid in(3,4,5,6)
+
+			   select ename,job,hiredate,sal
+			   from Employees
+			   where job in('salesman','clerk') and sal>1000 
+
+			  -- Between Operator
+
+			  select ename,sal 
+			  from Employees
+			  where sal between 1000 and 2000;
+
+
+			  select * from Employees
+			  where hiredate between    '1980-01-01'and '1982-12-31' 
+
+
+			  select eid,ename,hiredate,sal
+			  from Employees
+			  where job='analyst' and sal between 2000 and 4000;
+
+			  select * from Employees
+			  where HIREDATE between '1981-01-01' and '1981-12-31'
+
+
+			    select * from Employees
+			  where HIREDATE between '1987-01-01' and '1987-12-31'
+
+
+			  -- Like opreator
+
+			  select * 
+			  from Employees
+			  where ename like 'a%';
+
+			  select ename,job from Employees
+			  where ename like '%r';
+
+			  select ename from Employees
+			  where ename like 'm%n';
+
+			  select * from Employees
+			  where job like 's%';
+
+			  select ename, hiredate 
+			  from Employees
+			  where HIREDATE like '%-02-%';
+
+			  select * from Employees
+
+			   select ename, hiredate 
+			  from Employees
+			  where HIREDATE like '%-22';
+
+			  -- Alias Operator
+
+			  select sal*12 as Ann_sal
+			  from Employees
+
+			  select sal*6 as half_ann_sal
+			  from Employees
+
+
+		-- section 6 grouping data 
+		
+			-- group by 
+
+			select sum(sal),job
+			from Employees
+			group by job
+
+
+			select count(*)
+			from Employees
+			group by SAL
+
+			select count(*)
+			from Employees
+			where sal>1000
+			group by job
+
+			-- having 
+			-- it is used to filter group by  clause 
+
+			select count(*) 
+			from Employees
+			group by sal
+			having count(*)>=2
+
+
+			select ename from Employees
+			group by  ename
+			having ename >1
+
+
+
+
 
 
 
