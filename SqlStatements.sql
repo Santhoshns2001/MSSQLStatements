@@ -59,7 +59,7 @@ values('lokesh',8512346971,'bidar'),
 
 -- adding check constraint to the customerphone number column 
 alter table Customers
-add constraint CustomerPhNo check(CustomerPhNo not like '%0-9]%');
+add constraint CustomerPhNo check(CustomerPhNo not like '[6-9][0-9]%' and len(CustomerPhNo)=10);
 
 
 -- adding column to the existing table
@@ -467,7 +467,10 @@ ename desc;
 
 			select ename from Employees
 			group by  ename
-			having ename >1
+			having  count(*)>=1;
+
+
+			select * from Employees
 
 
 

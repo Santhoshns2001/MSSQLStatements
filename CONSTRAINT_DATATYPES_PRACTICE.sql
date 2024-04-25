@@ -3,15 +3,17 @@
 
 CREATE TABLE EMP (
     EID INT PRIMARY KEY,
-    ENAME VARCHAR(50) NOT NULL,
-    JOB VARCHAR(50) NOT NULL,
+    ENAME VARCHAR(25) NOT NULL,
+    JOB VARCHAR(25) NOT NULL,
     MGRID INT,
     HIREDATE DATE NOT NULL,
     SAL DECIMAL NOT NULL,
     COMMISSION INT,
     ENUMBER VARCHAR(20) UNIQUE CHECK (ENUMBER LIKE '[6-9][0-9]%' AND LEN(ENUMBER)=10),
-    COUNTRY VARCHAR(50) DEFAULT 'INDIA'
+    COUNTRY VARCHAR(20) DEFAULT 'INDIA'
 );
+
+DROP TABLE EMP
 
 -- ADDING FOREIGN KEY INTO EMP TABLE 
 ALTER TABLE EMP 
@@ -56,3 +58,193 @@ SELECT * FROM DEPARTMENT
 --SELECT * INTO TABLE3 FROM EMP;
 
 --SELECT * FROM TABLE3
+
+
+
+SELECT * FROM DEPARTMENT
+
+-- HAVING CLAUSE
+
+SELECT COUNT(*),DNO
+FROM EMP
+WHERE JOB ='CLERK'
+GROUP BY DNO
+HAVING COUNT(*)>=2;
+
+SELECT * FROM EMP
+
+SELECT SUM(SAL),DNO
+FROM EMP
+WHERE JOB ='CLERKS'
+GROUP BY DNO
+HAVING COUNT(*)>=4
+
+
+SELECT COUNT(*)
+FROM EMP
+WHERE SAL>1200
+GROUP BY JOB
+HAVING COUNT(*) >3800
+
+
+SELECT COUNT(*),DNO 
+FROM EMP
+WHERE JOB ='MANAGER'
+GROUP BY DNO
+HAVING COUNT(*)=2;
+
+SELECT * FROM EMP
+
+SELECT MAX(SAL),JOB  
+FROM EMP
+GROUP BY JOB
+HAVING MAX(SAL)>2600
+
+
+SELECT SAL
+FROM EMP
+GROUP BY SAL
+
+
+SELECT HIREDATE 
+FROM EMP
+GROUP BY HIREDATE
+
+SELECT AVG(SAL)
+FROM EMP
+GROUP BY DNO
+HAVING AVG(SAL)<3000
+
+SELECT DNO
+FROM EMP
+WHERE ENAME LIKE '%A%' OR ENAME LIKE '%S%'
+GROUP BY DNO
+HAVING COUNT(*)=3;
+
+SELECT MIN(SAL),MAX(SAL)
+FROM EMP
+GROUP BY JOB
+HAVING MIN(SAL)>1000 AND MAX(SAL)<5000;
+
+-- grouping sets
+
+	select sal,job
+	from emp
+	group by 
+	grouping sets(
+	(sal,job),
+	(sal),
+	(job),
+	()
+	);
+
+	select * from emp
+
+	select * into EmpTab from emp
+
+	SELECT * FROM EmpTab
+
+	SELECT JOB,HIREDATE 
+	FROM EMP
+	GROUP BY 
+	GROUPING SETS(
+	(JOB,HIREDATE),
+	()
+	);
+
+	SELECT JOB,HIREDATE
+	FROM EMP
+	GROUP BY JOB,HIREDATE
+
+	-- CUBE  
+
+	SELECT HIREDATE,JOB
+	FROM EmpTab
+	GROUP BY 
+	CUBE (HIREDATE,JOB)
+
+
+	SELECT DNO,COUNTRY
+	FROM EmpTab
+	GROUP BY 
+	CUBE(DNO,COUNTRY)
+
+	--ROLLUP
+
+	SELECT JOB, HIREDATE 
+	FROM EmpTab
+	GROUP BY 
+	ROLLUP (JOB,HIREDATE)
+
+	SELECT COUNTRY,JOB
+	FROM EmpTab
+	GROUP BY 
+	ROLLUP(COUNTRY,JOB)
+
+
+	--SECTION 8
+	    --SET OPERTORS
+
+		--SQL Server UNION is one of the set operations that allow you to combine results of two SELECT statements
+		--into a single result set which includes all the rows that belong to the SELECT statements in the union.
+
+
+		--1. UNION
+		SELECT ENAME,HIREDATE
+		FROM EmpTab
+		UNION 
+		SELECT ENAME, HIREDATE FROM Employees
+
+		SELECT ENAME,HIREDATE 
+		FROM EmpTab
+		UNION 
+		SELECT ENAME,HIREDATE FROM EMP
+
+		-- UNION ALL
+
+		SELECT ENAME,HIREDATE 
+		FROM EmpTab
+		UNION ALL
+		SELECT ENAME,HIREDATE FROM EMP
+
+		SELECT ENAME,HIREDATE
+		FROM EmpTab
+		UNION ALL
+		SELECT ENAME, HIREDATE FROM Employees
+
+		-- INTERSECT
+
+	--	The SQL Server INTERSECT combines result sets of two or more queries and returns distinct rows that are output by both queries.
+
+
+		SELECT ENAME,JOB
+		FROM EmpTab
+		INTERSECT
+		SELECT ENAME,JOB
+		FROM EMP
+
+		SELECT JOB, COUNTRY
+		FROM EMP
+		INTERSECT 
+		SELECT JOB,COUNTRY
+		FROM EmpTab
+
+
+		--EXCEPT
+
+		--The SQL Server EXCEPT compares the result sets of two queries and returns the distinct
+		--rows from the first query that are not output by the second query.
+		--In other words, the EXCEPT subtracts the result set of a query from another.
+
+
+		SELECT EID
+		FROM EmpTab
+		EXCEPT
+		SELECT EID
+		FROM Employees
+
+		SELECT EID
+		FROM EmpTab
+		EXCEPT
+		SELECT EID
+	    FROM EMP
