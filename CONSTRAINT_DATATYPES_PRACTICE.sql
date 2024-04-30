@@ -138,11 +138,7 @@ HAVING MIN(SAL)>1000 AND MAX(SAL)<5000;
 	()
 	);
 
-	select * from emp
-
-	select * into EmpTab from emp
-
-	SELECT * FROM EmpTab
+		
 
 	SELECT JOB,HIREDATE 
 	FROM EMP
@@ -248,3 +244,44 @@ HAVING MIN(SAL)>1000 AND MAX(SAL)<5000;
 		EXCEPT
 		SELECT EID
 	    FROM EMP
+
+
+		 -- Exercise
+
+
+		
+
+--1  fetch last two rows from a table.
+select * from EmpTab
+order by ename desc 
+offset 0 rows
+fetch next 2 rows only
+
+--2 Retrieve all the records from a table where a certain condition is met (e.g., all employees with a salary greater than 50,000).
+select * from EmpTab
+where sal>50000
+
+
+--3. Group data from a table based on a specific column and apply aggregate functions on each group (e.g., find the total sales amount for each product category).
+select eid,sum(sal) as total_sal
+from Employees
+group by eid
+
+
+--4. Use OFFSET and FETCH to retrieve 2 records from a table, skipping 2 rows .
+
+select * from Employees
+order by eid
+offset 2 rows
+fetch next 2 rows only;
+
+--5. Retrieve all orders placed in January 2024
+
+select hiredate 
+from EmpTab
+where hiredate between '2024-01-01' and '2024-01-31';
+
+--6.Retrieve all customers whose names start with 'J'.
+
+select * from EmpTab
+where ename like 'j%';
