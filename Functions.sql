@@ -33,9 +33,7 @@ SELECT RTRIM('Hello   ');
 SELECT SUBSTRING('Hello World', 7, 5);
 
 
-
-
---Practice
+--Practice user defined functions
 
 CREATE FUNCTION dbo.AddTwoNumbers (@num1 INT, @num2 INT)
 RETURNS INT
@@ -46,9 +44,7 @@ BEGIN
     RETURN @result;
 END;
 
-
 --calling above functions
-
 print dbo.AddTwoNumbers(5,7);
 
 
@@ -66,56 +62,69 @@ RETURN
 SELECT * FROM dbo.GetEmployeesByDepartment(10);
 
 
-CREATE FUNCTION dbo.AverageSalaryByDepartment (@departmentName NVARCHAR(100))
-RETURNS DECIMAL(10, 2)
-AS
+
+create function AddDigit(@num1 int, @num2 int)
+returns int
+as 
+begin 
+declare @result int;
+set @result = @num1+@num2;
+return @result 
+end
+
+
+select dbo.AddDigit(5,7);
+
+
+create table Students(
+
+SID INT NOT NULL PRIMARY KEY,
+SNAME VARCHAR(50) NOT NULL, 
+ROLL_NO INT NOT NULL UNIQUE,
+SCIENCE FLOAT NOT NULL DEFAULT 0,
+MATHS FLOAT NOT NULL DEFAULT 0,
+SOCIAL FLOAT NOT NULL DEFAULT 0,
+);
+
+
+INSERT INTO Students (SID,SNAME,ROLL_NO,SCIENCE,MATHS,SOCIAL) VALUES(1,'ABHI',1,35,42,65),
+(2,'ABHI',2,36,42,65),
+(3,'BARGHAV',3,45,52,75),
+(4,'CHARAN',4,55,62,85),
+(5,'DEEPAK',5,65,72,95),
+(6,'ESHWAR',6,37,82,45);
+
+SELECT * FROM Students
+
+
+CREATE FUNCTION GET_AVG(@ROLL_NO INT)
+RETURNS DECIMAL 
+AS 
 BEGIN
-    DECLARE @avgSalary DECIMAL(10, 2);
-
-    SELECT @avgSalary = AVG(Salary)
-    FROM Employees
-    WHERE Department = @departmentName;
-
-    RETURN @avgSalary;
-END;
+DECLARE  @RESULT DECIMAL;
+select @RESULT = (SCIENCE+MATHS+SOCIAL) /3 FROM STUDENTS WHERE ROLL_NO=@ROLL_NO;
+RETURN @RESULT
+END
 
 
-SELECT dbo.AverageSalaryByDepartment('IT');
+select SID,SNAME,ROLL_NO,SCIENCE,MATHS,SOCIAL,dbo.TOTAL_MARKS(ROLL_NO) AS TOTAL_MARKS, dbo.GET_AVG(ROLL_NO) AS AVERGAE  from Students
+
+SELECT * FROM STUDENTS
 
 
-CREATE FUNCTION dbo.ReverseString (@inputString NVARCHAR(MAX))
-RETURNS NVARCHAR(MAX)
-AS
-BEGIN
-    DECLARE @reversedString NVARCHAR(MAX);
-    SET @reversedString = REVERSE(@inputString);
-    RETURN @reversedString;
-END;
-
-
-SELECT dbo.ReverseString('Hello'); 
+ -- creating table valued functions
+     -- there are two types of table valued functions
+	 --1. inline table value function
 
 
 
-CREATE FUNCTION dbo.CalculateAge (@birthdate DATE)
-RETURNS INT
-AS
-BEGIN
-    DECLARE @age INT;
-    SET @age = DATEDIFF(YEAR, @birthdate, GETDATE());
-    RETURN @age;
-END;
+	 create function  GetStudentList(@total int)
+	 returns table 
+	 as 
+	 return select * from Students where (SCIENCE+MATHS+SOCIAL) >@total;
+
+	 select * from dbo.GetStudentList(150);
 
 
-SELECT dbo.CalculateAge('1990-05-15'); 
 
 
-CREATE FUNCTION dbo.Square (@number INT)
-RETURNS INT
-AS
-BEGIN
-    RETURN @number * @number;
-END;
-
-
-SELECT dbo.Square(5); -- Output: 25
