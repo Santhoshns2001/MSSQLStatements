@@ -166,10 +166,10 @@ WHERE
 	
 
 
-	--creating of INSTEAD OF Trigger
+	
 
 
-	--DISABLING OF Triggers
+	--**************DISABLING OF Triggers********************
 	/* syntax
 
 	DISABLE TRIGGER [schema_name.][trigger_name] 
@@ -209,14 +209,46 @@ disable trigger trgPreventDropTable
 on database
 
 
-	--ENABLING OF TRIGGERS
+	--**************ENABLING OF TRIGGERS**********************************
 
+/*
+syntax-
 
+ENABLE TRIGGER [schema_name.][trigger_name] 
+ON [object_name | DATABASE | ALL SERVER]
 
-	--Viewing the defination of triggers
+In this syntax:
+
+	->First, specify the name of the trigger that you want to enable.
+		Optionally, you can specify the name of the schema to which the trigger belongs.
+
+	->Second, specify the table to which the trigger belongs if the trigger is a DML trigger.
+	Use DATABASE if the trigger is a DDL database-scoped trigger or ALL SERVER if the trigger is DDL server-scoped trigger.
+
+*/
+
+		--enabling dml trigger
+
+		enable trigger TriggerSchema.trgAfterDelete
+		on TriggerSchema.Employee
+
+		--enabling ddl trigger
+
+		enable trigger trgPreventDropTable
+        on database
+
+	--******************Viewing the defination of triggers******************************
+
+	/*
+
+	*/
+
 
 
 	--Listing of all triggers in sqlserver
 
 
 	--Removing of triggers
+
+
+	--creating of INSTEAD OF Trigger

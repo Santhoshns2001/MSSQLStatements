@@ -65,47 +65,45 @@ new_value varchar (100) not null,
 Record_DateTime datetime not null
 )
 
-
-create trigger trgAfterUpdate 
+alter trigger trgAfterUpdate 
 on TriggerSchema.Employee
 after update
 as 
 begin
-declare @emp_id int ;
-declare @emp_name varchar(100) ;
-declare @old_emp_name varchar(100);
-declare @emp_sal decimal(10,2);
-declare @old_emp_sal decimal(10,2);
+	declare @emp_id int ;
+	declare @emp_name varchar(100) ;
+	declare @old_emp_name varchar(100);
+	declare @emp_sal decimal(10,2);
+	declare @old_emp_sal decimal(10,2);
 
+	--select @emp_id=i.Emp_Id from inserted i;
+	--select @emp_name=i.Emp_Name from inserted i;	
+	select @old_emp_name=i.Emp_Name from deleted i;
+	--select @emp_sal=s.Emp_Sal from inserted s;
+	select @old_emp_sal=s.Emp_Sal from deleted s;
 
-select @emp_id=i.Emp_Id from inserted i;
-select @emp_name=i.Emp_Name from inserted i;
-select @old_emp_name=i.Emp_Name from deleted i;
-select @emp_sal=s.Emp_Sal from inserted s;
-select @old_emp_sal=s.Emp_Sal from deleted s;
+	select @emp_id = i.Emp_Id, @emp_name=i.Emp_Name, @emp_sal=i.Emp_Sal from inserted i;
 
-if update (Emp_Name)
-begin 
-insert into TriggerSchema.EmployeeHistory (Emp_Id,field_name,old_value,new_value,Record_DateTime) values
-(@emp_id,'Emp_Name',@old_emp_name,@emp_name,GETDATE());
-end 
-
-
-if update (emp_sal)
-begin
-insert into TriggerSchema.EmployeeHistory(Emp_Id,field_name,old_value,new_value,Record_DateTime) values
-(@emp_id,'Emp_sal',@old_emp_sal,@emp_sal,GETDATE());
-end
+	if update (Emp_Name)
+	begin 
+	insert into TriggerSchema.EmployeeHistory (Emp_Id,field_name,old_value,new_value,Record_DateTime) values
+	(@emp_id,'Emp_Name',@old_emp_name,@emp_name,GETDATE());
+	end 
+	if update (emp_sal)
+	begin
+	insert into TriggerSchema.EmployeeHistory(Emp_Id,field_name,old_value,new_value,Record_DateTime) values
+	(@emp_id,'Emp_sal',@old_emp_sal,@emp_sal,GETDATE());
+	end
 end
 
 
 select * from TriggerSchema.Employee
 
-update TriggerSchema.Employee set Emp_Name='smith' where Emp_Id=2;
+update TriggerSchema.Employee set Emp_Name='allen' where Emp_Id=2;
 
 -- After update 
-select * from TriggerSchema.Employee
-select * from TriggerSchema.EmployeeHistory
+select * from TriggerSchema.Employee;
+select * from TriggerSchema.EmployeeHistory;
 
 
 -- Delete Trigger 

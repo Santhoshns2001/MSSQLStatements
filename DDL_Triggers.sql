@@ -129,6 +129,9 @@ GETDATE()
 
 end
 
+disable trigger trgDDLAuditTableChanges
+on all server
+
 
 	use MyDatabase
 	create table testing(id int)
